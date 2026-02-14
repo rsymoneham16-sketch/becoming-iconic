@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Becoming Iconic - Strategic Operations Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Raleway:wght@400;500;600;700&family=Allura&display=swap" rel="stylesheet">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Raleway', sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState } = React;
+
+    // Lucide icons as SVG components
+    const ChevronRight = ({ className, style }) => (
+      <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    );
+    const Lock = ({ className, style }) => (
+      <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+    );
+    const Unlock = ({ className, style }) => (
+      <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+    );
+    const Star = ({ className, style }) => (
+      <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+    );
+    const Zap = ({ className, style }) => (
+      <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+    );
+    const Edit2 = ({ className, style }) => (
+      <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+    );
+    const Check = ({ className, style }) => (
+      <svg className={className} style={style} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    );
+
+    const BecomingIconic = () => {
+      const [viewLevel, setViewLevel] = useState('master');
+      const [currentSeason, setCurrentSeason] = useState(1);
+      const [currentYear, setCurrentYear] = useState(2026);
+      const [currentQuarter, setCurrentQuarter] = useState(1);
+      const [currentMonth, setCurrentMonth] = useState(1);
+      const [currentWeek, setCurrentWeek] = useState(1);
+      const [revealLevel, setRevealLevel] = useState('green');
+      const [weekNotes, setWeekNotes] = useState({
+        '1-Wednesday': "Claude really is the AI for creatives.... I love it here! Being able to ramble off what it is I'm looking for and thinking about and having it built for me is everything I want out of an AI. I'm excited to continue to see how the system works and make the most out of it. I'm starting to get more anxious about execution, but all I can do is dive right in, I guess."
+      });
+      const [editingDay, setEditingDay] = useState(null);
+      const [tempNote, setTempNote] = useState('');
+
+      const seasonColors = ['#AA23FF', '#026820', '#FD5E53', '#0CAFE3', '#FD3DB5', '#71D9E2'];
+      const pillarColors = {
+        'Personal Development': '#8ED7F6',
+        'Physical Health': '#00BB77',
+        'Career/Financial': '#FF8C00',
+        'Relationships': '#FD1564',
+        'Skills & Knowledge': '#BD69BE',
+        'Spiritual/Emotional': '#BFFE28'
+      };
+
+      const masterTimeline = {
+        series1: {
+          name: "Becoming Iconic",
+          seasons: [
+            { id: 1, name: "Foundation", years: "2026-2027", surface: "Career & Financial Success", strategic: "Establishing credibility, building village, creating financial infrastructure", warRoom: "Phase 1: Become someone worth listening to. Prove you can operate in their system. Fund the real mission.", color: seasonColors[0] },
+            { id: 2, name: "Partnership", years: "2028-TBD", surface: "Wedding Planning & Relationship", strategic: "Strategic partnership formation, social media platform launch, expanding influence", warRoom: "Phase 2: Establish life partnership as operational foundation. Build public platform. Create social proof of stability and success.", color: seasonColors[1] },
+            { id: 3, name: "Access", years: "TBD", surface: "Travel & Experience", strategic: "Breaking into elite circles, building credibility with power holders", warRoom: "Phase 3: Infiltrate the rooms where decisions are made. Gain respect from those currently in power. Document everything for the masses.", color: seasonColors[2] }
+          ]
+        },
+        series2: {
+          name: "Being Iconic",
+          seasons: [
+            { id: 4, name: "Legacy", years: "TBD", surface: "Motherhood & Family", strategic: "Creating next generation, continuing platform growth", warRoom: "Phase 4: Raise the next generation within the new paradigm. They are part of the mission from birth.", color: seasonColors[3] },
+            { id: 5, name: "Positioning", years: "TBD", surface: "Motherhood & Personal Growth", strategic: "Setting pieces in motion, building political/social infrastructure", warRoom: "Phase 5: Begin the Rube Goldberg. Plant seeds for systemic change. Position yourself for influence.", color: seasonColors[4] },
+            { id: 6, name: "Execution", years: "TBD", surface: "Leadership & Impact", strategic: "Major structural changes, system transformation", warRoom: "Phase 6: Rebuild the American Governmental Machine. Decenter patriarchy. Restore matriarchal balance.", color: seasonColors[5] }
+          ]
+        }
+      };
+
+      const season1Data = {
+        quarters: [
+          { id: 1, name: "Q1", months: [1, 2, 3] },
+          { id: 2, name: "Q2", months: [4, 5, 6] },
+          { id: 3, name: "Q3", months: [7, 8, 9] },
+          { id: 4, name: "Q4", months: [10, 11, 12] }
+        ],
+        months: [
+          { id: 1, name: "January" }, { id: 2, name: "February" }, { id: 3, name: "March" },
+          { id: 4, name: "April" }, { id: 5, name: "May" }, { id: 6, name: "June" },
+          { id: 7, name: "July" }, { id: 8, name: "August" }, { id: 9, name: "September" },
+          { id: 10, name: "October" }, { id: 11, name: "November" }, { id: 12, name: "December" }
+        ],
+        firstNinetyDays: [
+          { week: 1, start: "Dec 28, 2025", end: "Jan 3, 2026", hotLeads: 2, presentations: 1, proposals: 0, theme: "Getting Started", month: 1 },
+          { week: 2, start: "Jan 4", end: "Jan 10", hotLeads: 2, presentations: 1, proposals: 0, theme: "Building Confidence", month: 1 },
+          { week: 3, start: "Jan 11", end: "Jan 17", hotLeads: 3, presentations: 1, proposals: 1, theme: "First Proposal", month: 1 },
+          { week: 4, start: "Jan 18", end: "Jan 24", hotLeads: 3, presentations: 2, proposals: 1, theme: "Momentum Building", month: 1 },
+          { week: 5, start: "Jan 25", end: "Jan 31", hotLeads: 3, presentations: 2, proposals: 1, theme: "Consistency", month: 1 },
+          { week: 6, start: "Feb 1", end: "Feb 7", hotLeads: 4, presentations: 2, proposals: 1, theme: "Scaling Up", month: 2 },
+          { week: 7, start: "Feb 8", end: "Feb 14", hotLeads: 4, presentations: 2, proposals: 2, theme: "Full Pipeline", month: 2 },
+          { week: 8, start: "Feb 15", end: "Feb 21", hotLeads: 4, presentations: 3, proposals: 2, theme: "Conversion Focus", month: 2 },
+          { week: 9, start: "Feb 22", end: "Feb 28", hotLeads: 5, presentations: 3, proposals: 2, theme: "Target Achievement", month: 2 },
+          { week: 10, start: "Mar 1", end: "Mar 7", hotLeads: 5, presentations: 3, proposals: 2, theme: "Sustained Excellence", month: 3 },
+          { week: 11, start: "Mar 8", end: "Mar 14", hotLeads: 5, presentations: 3, proposals: 2, theme: "Refinement", month: 3 },
+          { week: 12, start: "Mar 15", end: "Mar 21", hotLeads: 5, presentations: 3, proposals: 2, theme: "Foundation Complete", month: 3 }
+        ]
+      };
+
+      const weeklyFramework = {
+        Sunday: { theme: "Restoration", focus: "Rest, inspiration, vision alignment", energy: "Renewal" },
+        Monday: { theme: "Momentum", focus: "Sales prospecting & outreach", energy: "High action" },
+        Tuesday: { theme: "Connection", focus: "Presentations & relationship building", energy: "Interpersonal" },
+        Wednesday: { theme: "Creation", focus: "Proposals, content, skill development", energy: "Deep work" },
+        Thursday: { theme: "Growth", focus: "Learning, training, personal development", energy: "Expansion" },
+        Friday: { theme: "Follow-up", focus: "Pipeline management & planning", energy: "Completion" },
+        Saturday: { theme: "Integration", focus: "Reflection, character mapping, storyboarding", energy: "Strategic" }
+      };
+
+      const transformationPillars = [
+        { pillar: "Personal Development", current: 20 },
+        { pillar: "Physical Health", current: 15 },
+        { pillar: "Career/Financial", current: 25 },
+        { pillar: "Relationships", current: 10 },
+        { pillar: "Skills & Knowledge", current: 20 },
+        { pillar: "Spiritual/Emotional", current: 15 }
+      ];
+
+      const generateCalendar = (year, month) => {
+        const firstDay = new Date(year, month - 1, 1);
+        const lastDay = new Date(year, month, 0);
+        const daysInMonth = lastDay.getDate();
+        const startingDayOfWeek = firstDay.getDay();
+        
+        const calendar = [];
+        let week = new Array(7).fill(null);
+        
+        for (let day = 1; day <= daysInMonth; day++) {
+          const dayOfWeek = (startingDayOfWeek + day - 1) % 7;
+          week[dayOfWeek] = day;
+          
+          if (dayOfWeek === 6 || day === daysInMonth) {
+            calendar.push([...week]);
+            week = new Array(7).fill(null);
+          }
+        }
+        
+        return calendar;
+      };
+
+      const findWeekForDay = (monthId, day) => {
+        const weeksInMonth = season1Data.firstNinetyDays.filter(w => w.month === monthId);
+        for (let week of weeksInMonth) {
+          const startParts = week.start.split(' ');
+          const endParts = week.end.split(' ');
+          const startDay = parseInt(startParts[1] || startParts[0].replace(/\D/g, ''));
+          const endDay = parseInt(endParts[1] || endParts[0].replace(/\D/g, ''));
+          
+          if (day >= startDay && day <= endDay) {
+            return week.week;
+          }
+        }
+        return weeksInMonth[0]?.week || 1;
+      };
+
+      const saveNote = (noteKey) => {
+        setWeekNotes(prev => ({ ...prev, [noteKey]: tempNote }));
+        setEditingDay(null);
+        setTempNote('');
+      };
+
+      const StoplightToggle = () => (
+        <div style={{
+          position: 'fixed',
+          top: '16px',
+          right: '16px',
+          zIndex: 50,
+          background: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(8px)',
+          borderRadius: '16px',
+          boxShadow: '0 0 30px rgba(170, 35, 255, 0.3)',
+          border: '2px solid',
+          borderImage: 'linear-gradient(135deg, #AA23FF, #FD5E53, #71D9E2) 1',
+          padding: '16px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            {revealLevel === 'green' ? <Lock style={{ width: '20px', height: '20px' }} /> : <Unlock style={{ width: '20px', height: '20px' }} />}
+            <span style={{ fontSize: '14px', fontFamily: 'Montserrat', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Security Level</span>
+          </div>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            {[{level: 'green', color: '#00BB77'}, {level: 'yellow', color: '#FF8C00'}, {level: 'red', color: '#FD1564'}].map(({level, color}) => (
+              <button
+                key={level}
+                onClick={() => setRevealLevel(level)}
+                style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  border: '3px solid',
+                  borderColor: color,
+                  backgroundColor: revealLevel === level ? color : `${color}40`,
+                  transform: revealLevel === level ? 'scale(1.25)' : 'scale(1)',
+                  boxShadow: revealLevel === level ? `0 0 25px ${color}80` : 'none',
+                  transition: 'all 0.3s',
+                  cursor: 'pointer'
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      );
+
+      const Breadcrumbs = () => {
+        const crumbs = [{ label: 'Master', level: 'master' }];
+        if (viewLevel !== 'master') crumbs.push({ label: `Season ${currentSeason}`, level: 'season' });
+        if (['year', 'quarter', 'month', 'week'].includes(viewLevel)) crumbs.push({ label: currentYear.toString(), level: 'year' });
+        if (['quarter', 'month', 'week'].includes(viewLevel)) crumbs.push({ label: `Q${currentQuarter}`, level: 'quarter' });
+        if (['month', 'week'].includes(viewLevel)) crumbs.push({ label: season1Data.months[currentMonth - 1].name, level: 'month' });
+        if (viewLevel === 'week') crumbs.push({ label: `Week ${currentWeek}`, level: 'week' });
+
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '16px', marginBottom: '24px', flexWrap: 'wrap', fontFamily: 'Raleway' }}>
+            {crumbs.map((crumb, idx) => (
+              <React.Fragment key={idx}>
+                {idx > 0 && <ChevronRight style={{ width: '20px', height: '20px', color: seasonColors[currentSeason - 1] }} />}
+                <button
+                  onClick={() => setViewLevel(crumb.level)}
+                  style={{
+                    fontWeight: 500,
+                    padding: '4px 8px',
+                    borderRadius: '4px',
+                    color: seasonColors[currentSeason - 1],
+                    background: 'transparent',
+                    border: 'none',
+                    cursor: 'pointer',
+                    transition: 'transform 0.2s'
+                  }}
+                  onMouseOver={(e) => e.target.style.transform = 'scale(1.05)'}
+                  onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+                >
+                  {crumb.label}
+                </button>
+              </React.Fragment>
+            ))}
+          </div>
+        );
+      };
+
+      // Render different views based on viewLevel
+      let content;
+      
+      if (viewLevel === 'week') {
+        const week = season1Data.firstNinetyDays[currentWeek - 1];
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const weekDates = [
+          { day: 'Sunday', date: 'Dec 28, 2025' },
+          { day: 'Monday', date: 'Dec 29, 2025' },
+          { day: 'Tuesday', date: 'Dec 30, 2025' },
+          { day: 'Wednesday', date: 'Dec 31, 2025' },
+          { day: 'Thursday', date: 'Jan 1, 2026' },
+          { day: 'Friday', date: 'Jan 2, 2026' },
+          { day: 'Saturday', date: 'Jan 3, 2026' }
+        ];
+
+        content = (
+          <div style={{ marginBottom: '32px' }}>
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(12px)',
+              borderRadius: '24px',
+              boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+              padding: '32px'
+            }}>
+              <h2 style={{
+                fontSize: '36px',
+                fontFamily: 'Montserrat',
+                fontWeight: 900,
+                color: seasonColors[currentSeason - 1],
+                marginBottom: '8px'
+              }}>
+                Week {week.week}: {week.theme}
+              </h2>
+              <p style={{
+                fontSize: '20px',
+                fontFamily: 'Raleway',
+                color: '#666',
+                marginBottom: '32px'
+              }}>
+                {week.start} - {week.end}
+              </p>
+
+              {revealLevel !== 'green' && (
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                  gap: '24px',
+                  marginBottom: '32px'
+                }}>
+                  <div style={{
+                    padding: '24px',
+                    borderRadius: '16px',
+                    backgroundColor: `${seasonColors[0]}20`,
+                    borderLeft: `6px solid ${seasonColors[0]}`
+                  }}>
+                    <h3 style={{
+                      fontSize: '18px',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 900,
+                      color: seasonColors[0],
+                      marginBottom: '8px'
+                    }}>Hot Leads Target</h3>
+                    <p style={{
+                      fontSize: '48px',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 900,
+                      color: seasonColors[0]
+                    }}>{week.hotLeads}</p>
+                  </div>
+                  <div style={{
+                    padding: '24px',
+                    borderRadius: '16px',
+                    backgroundColor: `${seasonColors[3]}20`,
+                    borderLeft: `6px solid ${seasonColors[3]}`
+                  }}>
+                    <h3 style={{
+                      fontSize: '18px',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 900,
+                      color: seasonColors[3],
+                      marginBottom: '8px'
+                    }}>Presentations</h3>
+                    <p style={{
+                      fontSize: '48px',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 900,
+                      color: seasonColors[3]
+                    }}>{week.presentations}</p>
+                  </div>
+                  <div style={{
+                    padding: '24px',
+                    borderRadius: '16px',
+                    backgroundColor: `${seasonColors[4]}20`,
+                    borderLeft: `6px solid ${seasonColors[4]}`
+                  }}>
+                    <h3 style={{
+                      fontSize: '18px',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 900,
+                      color: seasonColors[4],
+                      marginBottom: '8px'
+                    }}>Proposals</h3>
+                    <p style={{
+                      fontSize: '48px',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 900,
+                      color: seasonColors[4]
+                    }}>{week.proposals}</p>
+                  </div>
+                </div>
+              )}
+
+              <div style={{ marginTop: '32px' }}>
+                <h3 style={{
+                  fontSize: '28px',
+                  fontFamily: 'Montserrat',
+                  fontWeight: 900,
+                  marginBottom: '20px'
+                }}>Daily Tracking</h3>
+                
+                {days.map((day, idx) => {
+                  const framework = weeklyFramework[day];
+                  const noteKey = `${currentWeek}-${day}`;
+                  const isEditing = editingDay === noteKey;
+                  const dateInfo = weekDates[idx];
+
+                  return (
+                    <div key={day} style={{
+                      borderRadius: '16px',
+                      padding: '24px',
+                      marginBottom: '20px',
+                      border: `3px solid ${seasonColors[currentSeason - 1]}`,
+                      backgroundColor: 'white',
+                      boxShadow: `0 0 20px ${seasonColors[currentSeason - 1]}25`,
+                      transition: 'all 0.3s'
+                    }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '12px' }}>
+                        <div>
+                          <h4 style={{
+                            fontSize: '24px',
+                            fontFamily: 'Montserrat',
+                            fontWeight: 900,
+                            color: seasonColors[currentSeason - 1],
+                            marginBottom: '4px'
+                          }}>
+                            {dateInfo.day} — {dateInfo.date}
+                          </h4>
+                          <p style={{
+                            fontSize: '18px',
+                            fontFamily: 'Allura',
+                            fontWeight: 700,
+                            color: seasonColors[currentSeason - 1]
+                          }}>
+                            {framework.theme}
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            if (isEditing) {
+                              saveNote(noteKey);
+                            } else {
+                              setEditingDay(noteKey);
+                              setTempNote(weekNotes[noteKey] || '');
+                            }
+                          }}
+                          style={{
+                            padding: '12px',
+                            borderRadius: '12px',
+                            backgroundColor: `${seasonColors[currentSeason - 1]}20`,
+                            border: 'none',
+                            cursor: 'pointer',
+                            transition: 'transform 0.2s'
+                          }}
+                          onMouseOver={(e) => e.target.style.transform = 'scale(1.1)'}
+                          onMouseOut={(e) => e.target.style.transform = 'scale(1)'}
+                        >
+                          {isEditing ? 
+                            <Check style={{ width: '20px', height: '20px', color: '#00BB77' }} /> : 
+                            <Edit2 style={{ width: '20px', height: '20px', color: seasonColors[currentSeason - 1] }} />
+                          }
+                        </button>
+                      </div>
+                      <p style={{
+                        fontSize: '16px',
+                        fontFamily: 'Raleway',
+                        color: '#666',
+                        marginBottom: '12px'
+                      }}>
+                        {framework.focus}
+                      </p>
+                      <span style={{
+                        display: 'inline-block',
+                        padding: '8px 16px',
+                        borderRadius: '999px',
+                        fontSize: '14px',
+                        fontFamily: 'Raleway',
+                        fontWeight: 700,
+                        backgroundColor: `${seasonColors[currentSeason - 1]}25`,
+                        color: seasonColors[currentSeason - 1],
+                        marginBottom: '16px'
+                      }}>
+                        {framework.energy}
+                      </span>
+                      {isEditing ? (
+                        <textarea
+                          value={tempNote}
+                          onChange={(e) => setTempNote(e.target.value)}
+                          style={{
+                            width: '100%',
+                            padding: '16px',
+                            borderRadius: '12px',
+                            fontSize: '16px',
+                            fontFamily: 'Raleway',
+                            border: `2px solid ${seasonColors[currentSeason - 1]}`,
+                            marginTop: '12px',
+                            minHeight: '100px'
+                          }}
+                          placeholder="Notes and tracking..."
+                        />
+                      ) : (
+                        <div style={{
+                          fontSize: '16px',
+                          fontFamily: 'Raleway',
+                          marginTop: '12px',
+                          minHeight: '80px',
+                          padding: '16px',
+                          borderRadius: '12px',
+                          backgroundColor: `${seasonColors[currentSeason - 1]}10`,
+                          color: '#333'
+                        }}>
+                          {weekNotes[noteKey] || 'No notes yet...'}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      } else {
+        content = (
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: '24px',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+            padding: '32px',
+            textAlign: 'center'
+          }}>
+            <h2 style={{
+              fontSize: '24px',
+              fontFamily: 'Montserrat',
+              fontWeight: 900
+            }}>
+              Navigate to Week View to see daily tracking
+            </h2>
+            <p style={{ marginTop: '16px', fontFamily: 'Raleway' }}>
+              Use the breadcrumbs or click through: Master → Season 1 → 2026 → Q1 → January → Week 1
+            </p>
+          </div>
+        );
+      }
+
+      return (
+        <div style={{
+          minHeight: '100vh',
+          padding: '32px',
+          background: 'linear-gradient(135deg, #E6E6FA 0%, #FFC0CB 50%, #98D8C8 100%)'
+        }}>
+          <StoplightToggle />
+          
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: '24px',
+            boxShadow: '0 0 60px rgba(170, 35, 255, 0.4)',
+            border: '4px solid',
+            borderImage: `linear-gradient(90deg, ${seasonColors.join(', ')}) 1`,
+            padding: '40px',
+            marginBottom: '32px',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              opacity: 0.1,
+              background: 'radial-gradient(circle at 20% 50%, #AA23FF 0%, transparent 50%), radial-gradient(circle at 80% 50%, #71D9E2 0%, transparent 50%)'
+            }}></div>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div>
+                <h1 style={{
+                  fontSize: '48px',
+                  fontFamily: 'Montserrat',
+                  fontWeight: 900,
+                  marginBottom: '12px',
+                  background: `linear-gradient(135deg, ${seasonColors[0]}, ${seasonColors[2]}, ${seasonColors[5]})`,
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}>
+                  Becoming Iconic
+                </h1>
+                <p style={{
+                  fontSize: '24px',
+                  fontFamily: 'Allura',
+                  color: seasonColors[currentSeason - 1]
+                }}>
+                  {revealLevel === 'green' && 'Personal Transformation Dashboard'}
+                  {revealLevel === 'yellow' && 'Strategic Operations Center'}
+                  {revealLevel === 'red' && 'Mission Control: Rebuilding the System'}
+                </p>
+              </div>
+              <Star style={{
+                width: '80px',
+                height: '80px',
+                color: seasonColors[currentSeason - 1],
+                filter: 'drop-shadow(0 0 10px currentColor)'
+              }} />
+            </div>
+          </div>
+
+          <Breadcrumbs />
+          {content}
+
+          <div style={{
+            marginTop: '32px',
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(12px)',
+            borderRadius: '24px',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+            padding: '32px'
+          }}>
+            <h2 style={{
+              fontSize: '28px',
+              fontFamily: 'Montserrat',
+              fontWeight: 900,
+              marginBottom: '12px'
+            }}>
+              Transformation Pillars Progress
+            </h2>
+            <p style={{
+              fontSize: '16px',
+              fontFamily: 'Raleway',
+              color: '#888',
+              marginBottom: '24px'
+            }}>
+              Baseline percentages - awaiting assessment data for calibration
+            </p>
+            <div>
+              {transformationPillars.map((pillar, idx) => (
+                <div key={idx} style={{ marginBottom: '20px' }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    marginBottom: '8px'
+                  }}>
+                    <span style={{
+                      fontSize: '18px',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 900,
+                      color: pillarColors[pillar.pillar]
+                    }}>
+                      {pillar.pillar}
+                    </span>
+                    <span style={{
+                      fontSize: '18px',
+                      fontFamily: 'Montserrat',
+                      fontWeight: 900,
+                      color: pillarColors[pillar.pillar]
+                    }}>
+                      {pillar.current}%
+                    </span>
+                  </div>
+                  <div style={{
+                    width: '100%',
+                    backgroundColor: '#e5e7eb',
+                    borderRadius: '999px',
+                    height: '16px',
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}>
+                    <div style={{
+                      height: '16px',
+                      borderRadius: '999px',
+                      width: `${pillar.current}%`,
+                      backgroundColor: pillarColors[pillar.pillar],
+                      boxShadow: `0 0 15px ${pillarColors[pillar.pillar]}60`,
+                      transition: 'width 0.5s'
+                    }}></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<BecomingIconic />, document.getElementById('root'));
+  </script>
+</body>
+</html>
