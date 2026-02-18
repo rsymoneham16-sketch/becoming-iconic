@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Becoming Iconic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Raleway:wght@400;700&family=Allura&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Raleway', sans-serif; }
+    button { font-family: inherit; cursor: pointer; }
+    .btn { padding: 12px 24px; border-radius: 12px; border: none; font-weight: 700; transition: all 0.2s; }
+    .btn:hover { transform: scale(1.05); }
+  </style>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    const seasonColors = ['#AA23FF', '#026820', '#FD5E53', '#0CAFE3', '#FD3DB5', '#71D9E2'];
+    const pillarColors = {
+      'Personal Development': '#8ED7F6', 'Physical Health': '#00BB77',
+      'Career/Financial': '#FF8C00', 'Relationships': '#FD1564',
+      'Skills & Knowledge': '#BD69BE', 'Spiritual/Emotional': '#BFFE28'
+    };
+
+    const masterTimeline = {
+      series1: { name: "Becoming Iconic", seasons: [
+        { id: 1, name: "Foundation", years: [2026, 2027], surface: "Career & Financial Success", 
+          strategic: "Establishing credibility, building village, creating financial infrastructure",
+          warRoom: "Phase 1: Become someone worth listening to. Prove you can operate in their system. Fund the real mission." },
+        { id: 2, name: "Partnership", years: [2028, 2029, 2030], surface: "Wedding Planning & Relationship",
+          strategic: "Strategic partnership formation, social media platform launch, expanding influence",
+          warRoom: "Phase 2: Establish life partnership as operational foundation. Build public platform." },
+        { id: 3, name: "Access", years: [2031, 2032], surface: "Travel & Experience",
+          strategic: "Breaking into elite circles, building credibility with power holders",
+          warRoom: "Phase 3: Infiltrate the rooms where decisions are made. Document everything for the masses." }
+      ]},
+      series2: { name: "Being Iconic", seasons: [
+        { id: 4, name: "Legacy", years: [2033, 2034], surface: "Motherhood & Family",
+          strategic: "Creating next generation, continuing platform growth",
+          warRoom: "Phase 4: Raise the next generation within the new paradigm." },
+        { id: 5, name: "Positioning", years: [2035, 2036], surface: "Motherhood & Personal Growth",
+          strategic: "Setting pieces in motion, building political/social infrastructure",
+          warRoom: "Phase 5: Begin the Rube Goldberg. Plant seeds for systemic change." },
+        { id: 6, name: "Execution", years: [2037, 2038, 2039, 2040], surface: "Leadership & Impact",
+          strategic: "Major structural changes, system transformation",
+          warRoom: "Phase 6: Rebuild the American Governmental Machine. Decenter patriarchy." }
+      ]}
+    };
+
+    // Pre-defined first 12 weeks with targets
+    const firstTwelveWeeks = {
+      1: { hotLeads: 2, presentations: 1, proposals: 0, theme: "Getting Started" },
+      2: { hotLeads: 2, presentations: 1, proposals: 0, theme: "Building Confidence" },
+      3: { hotLeads: 3, presentations: 1, proposals: 1, theme: "First Proposal" },
+      4: { hotLeads: 3, presentations: 2, proposals: 1, theme: "Momentum Building" },
+      5: { hotLeads: 3, presentations: 2, proposals: 1, theme: "Consistency" },
+      6: { hotLeads: 4, presentations: 2, proposals: 1, theme: "Scaling Up" },
+      7: { hotLeads: 4, presentations: 2, proposals: 2, theme: "Full Pipeline" },
+      8: { hotLeads: 4, presentations: 3, proposals: 2, theme: "Conversion Focus" },
+      9: { hotLeads: 5, presentations: 3, proposals: 2, theme: "Target Achievement" },
+      10: { hotLeads: 5, presentations: 3, proposals: 2, theme: "Sustained Excellence" },
+      11: { hotLeads: 5, presentations: 3, proposals: 2, theme: "Refinement" },
+      12: { hotLeads: 5, presentations: 3, proposals: 2, theme: "Foundation Complete" }
+    };
+
+    const App = () => {
+      const [view, setView] = useState('master');
+      const [season, setSeason] = useState(1);
+      const [year, setYear] = useState(2026);
+      const [quarter, setQuarter] = useState(1);
+      const [month, setMonth] = useState(1);
+      const [weekStart, setWeekStart] = useState(null); // Store actual week start date
+      const [reveal, setReveal] = useState('green');
+      const [notes, setNotes] = useState({'1-Wednesday': "Claude really is the AI for creatives.... I love it here!"});
+      const [editing, setEditing] = useState(null);
+      const [temp, setTemp] = useState('');
+
+      const allSeasons = [...masterTimeline.series1.seasons, ...masterTimeline.series2.seasons];
+      const currentSeason = allSeasons.find(s => s.id === season);
+
+      const framework = {
+        Sunday: { theme: "Restoration", focus: "Rest, inspiration, vision alignment", energy: "Renewal" },
+        Monday: { theme: "Momentum", focus: "Sales prospecting & outreach", energy: "High action" },
+        Tuesday: { theme: "Connection", focus: "Presentations & relationship building", energy: "Interpersonal" },
+        Wednesday: { theme: "Creation", focus: "Proposals, content, skill development", energy: "Deep work" },
+        Thursday: { theme: "Growth", focus: "Learning, training, personal development", energy: "Expansion" },
+        Friday: { theme: "Follow-up", focus: "Pipeline management & planning", energy: "Completion" },
+        Saturday: { theme: "Integration", focus: "Reflection, character mapping, storyboarding", energy: "Strategic" }
+      };
+
+      const pillars = [
+        { pillar: "Personal Development", current: 20 }, { pillar: "Physical Health", current: 15 },
+        { pillar: "Career/Financial", current: 25 }, { pillar: "Relationships", current: 10 },
+        { pillar: "Skills & Knowledge", current: 20 }, { pillar: "Spiritual/Emotional", current: 15 }
+      ];
+
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      const monthsShort = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+      const genCal = (y, m) => {
+        const first = new Date(y, m - 1, 1).getDay();
+        const days = new Date(y, m, 0).getDate();
+        const cal = [];
+        let w = Array(7).fill(null);
+        for (let d = 1; d <= days; d++) {
+          w[(first + d - 1) % 7] = d;
+          if ((first + d - 1) % 7 === 6 || d === days) {
+            cal.push([...w]);
+            w = Array(7).fill(null);
+          }
+        }
+        return cal;
+      };
+
+      // Generate all weeks for a given month
+      const getWeeksInMonth = (y, m) => {
+        const cal = genCal(y, m);
+        const weeksData = [];
+        cal.forEach(week => {
+          const firstDay = week.find(d => d !== null);
+          if (firstDay) {
+            const startDate = new Date(y, m - 1, firstDay);
+            // Adjust to Sunday
+            const dayOfWeek = startDate.getDay();
+            startDate.setDate(startDate.getDate() - dayOfWeek);
+            
+            const endDate = new Date(startDate);
+            endDate.setDate(endDate.getDate() + 6);
+            
+            weeksData.push({
+              startDate: new Date(startDate),
+              endDate: new Date(endDate),
+              month: m
+            });
+          }
+        });
+        return weeksData;
+      };
+
+      // Get week number (1-based, starting from Dec 28, 2025)
+      const getWeekNumber = (date) => {
+        const firstWeekStart = new Date(2025, 11, 28); // Dec 28, 2025
+        const diffTime = date - firstWeekStart;
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+        return Math.floor(diffDays / 7) + 1;
+      };
+
+      const formatDate = (date) => {
+        return `${monthsShort[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+      };
+
+      const Card = ({children, color, onClick}) => (
+        <div onClick={onClick} style={{
+          background: 'white', borderRadius: '16px', padding: '24px',
+          border: `3px solid ${color || seasonColors[season-1]}`,
+          boxShadow: `0 0 20px ${(color || seasonColors[season-1])}40`,
+          cursor: onClick ? 'pointer' : 'default', transition: 'all 0.3s',
+          marginBottom: '16px'
+        }}>{children}</div>
+      );
+
+      const Breadcrumb = () => {
+        const crumbs = [{l: 'Master', v: 'master'}];
+        if (view !== 'master') crumbs.push({l: `Season ${season}`, v: 'season'});
+        if (['year','quarter','month','week'].includes(view)) crumbs.push({l: year, v: 'year'});
+        if (['quarter','month','week'].includes(view)) crumbs.push({l: `Q${quarter}`, v: 'quarter'});
+        if (['month','week'].includes(view)) crumbs.push({l: months[month-1], v: 'month'});
+        if (view === 'week' && weekStart) crumbs.push({l: `Week`, v: 'week'});
+        return (
+          <div style={{display:'flex', gap:'8px', marginBottom:'24px', flexWrap:'wrap'}}>
+            {crumbs.map((c,i) => (
+              <React.Fragment key={i}>
+                {i>0 && <span>›</span>}
+                <button onClick={() => setView(c.v)} style={{
+                  background:'none', border:'none', color:seasonColors[season-1],
+                  fontWeight:700, fontSize:'16px'
+                }}>{c.l}</button>
+              </React.Fragment>
+            ))}
+          </div>
+        );
+      };
+
+      return (
+        <div style={{
+          minHeight:'100vh', padding:'32px',
+          background:'linear-gradient(135deg, #E6E6FA 0%, #FFC0CB 50%, #98D8C8 100%)'
+        }}>
+          {/* Security Toggle */}
+          <div style={{
+            position:'fixed', top:'16px', right:'16px', zIndex:50,
+            background:'rgba(255,255,255,0.9)', borderRadius:'16px',
+            padding:'16px', boxShadow:'0 0 30px rgba(170,35,255,0.3)'
+          }}>
+            <div style={{fontSize:'12px', fontWeight:900, marginBottom:'8px'}}>SECURITY</div>
+            <div style={{display:'flex', gap:'8px'}}>
+              {[{l:'green',c:'#00BB77'},{l:'yellow',c:'#FF8C00'},{l:'red',c:'#FD1564'}].map(({l,c}) => (
+                <button key={l} onClick={() => setReveal(l)} style={{
+                  width:'40px', height:'40px', borderRadius:'50%',
+                  border:`3px solid ${c}`, background: reveal===l ? c : `${c}40`,
+                  transform: reveal===l ? 'scale(1.2)' : 'scale(1)'
+                }} />
+              ))}
+            </div>
+          </div>
+
+          {/* Header */}
+          <div style={{
+            background:'rgba(255,255,255,0.95)', borderRadius:'24px',
+            padding:'40px', marginBottom:'32px',
+            boxShadow:'0 0 60px rgba(170,35,255,0.4)'
+          }}>
+            <h1 style={{
+              fontSize:'48px', fontFamily:'Montserrat', fontWeight:900,
+              background:`linear-gradient(135deg, ${seasonColors[0]}, ${seasonColors[2]}, ${seasonColors[5]})`,
+              WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'
+            }}>Becoming Iconic</h1>
+            <p style={{fontSize:'24px', fontFamily:'Allura', color:seasonColors[season-1]}}>
+              {reveal==='green' && 'Personal Transformation Dashboard'}
+              {reveal==='yellow' && 'Strategic Operations Center'}
+              {reveal==='red' && 'Mission Control: Rebuilding the System'}
+            </p>
+          </div>
+
+          <Breadcrumb />
+
+          {/* MASTER VIEW */}
+          {view === 'master' && (
+            <div style={{background:'rgba(255,255,255,0.95)', borderRadius:'24px', padding:'32px'}}>
+              <h2 style={{fontSize:'32px', fontFamily:'Montserrat', fontWeight:900, marginBottom:'24px'}}>
+                Complete Operations Map
+              </h2>
+              {[masterTimeline.series1, masterTimeline.series2].map((series, idx) => (
+                <div key={idx} style={{marginBottom:'32px'}}>
+                  <h3 style={{
+                    fontSize:'24px', fontFamily:'Montserrat', fontWeight:900,
+                    color:seasonColors[idx*3], marginBottom:'16px'
+                  }}>{series.name}</h3>
+                  {series.seasons.map(s => (
+                    <Card key={s.id} color={seasonColors[s.id-1]} onClick={() => {setSeason(s.id); setView('season')}}>
+                      <h4 style={{fontSize:'20px', fontFamily:'Montserrat', fontWeight:900, marginBottom:'8px'}}>
+                        Season {s.id}: {s.name}
+                      </h4>
+                      <p style={{fontSize:'14px', color:'#666', marginBottom:'8px'}}>
+                        {s.years[0]} - {s.years[s.years.length-1]}
+                      </p>
+                      <p><strong>Surface:</strong> {s.surface}</p>
+                      {reveal !== 'green' && <p style={{color:'#0CAFE3', marginTop:'8px'}}>
+                        <strong>Strategic:</strong> {s.strategic}
+                      </p>}
+                      {reveal === 'red' && <p style={{color:'#FD1564', marginTop:'8px', fontWeight:700}}>
+                        <strong>War Room:</strong> {s.warRoom}
+                      </p>}
+                    </Card>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* SEASON VIEW */}
+          {view === 'season' && currentSeason && (
+            <Card color={seasonColors[season-1]}>
+              <h2 style={{fontSize:'32px', fontFamily:'Montserrat', fontWeight:900, marginBottom:'16px'}}>
+                Season {currentSeason.id}: {currentSeason.name}
+              </h2>
+              <p style={{color:'#666', marginBottom:'16px'}}>
+                {currentSeason.years[0]} - {currentSeason.years[currentSeason.years.length-1]}
+              </p>
+              <div style={{padding:'16px', background:`${seasonColors[season-1]}15`, borderRadius:'12px', marginBottom:'12px'}}>
+                <strong>Surface:</strong> {currentSeason.surface}
+              </div>
+              {reveal !== 'green' && (
+                <div style={{padding:'16px', background:'#0CAFE320', borderRadius:'12px', marginBottom:'12px'}}>
+                  <strong>Strategic:</strong> {currentSeason.strategic}
+                </div>
+              )}
+              {reveal === 'red' && (
+                <div style={{padding:'16px', background:'#FD156420', borderRadius:'12px', marginBottom:'16px'}}>
+                  <strong>War Room:</strong> {currentSeason.warRoom}
+                </div>
+              )}
+              <div style={{marginTop:'24px'}}>
+                <h3 style={{fontFamily:'Montserrat', fontWeight:900, marginBottom:'12px'}}>Navigate to Year:</h3>
+                <div style={{display:'flex', gap:'12px', flexWrap:'wrap'}}>
+                  {currentSeason.years.map(y => (
+                    <button key={y} onClick={() => {setYear(y); setView('year')}} className="btn" style={{
+                      background:seasonColors[season-1], color:'white'
+                    }}>{y}</button>
+                  ))}
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {/* YEAR VIEW */}
+          {view === 'year' && (
+            <Card>
+              <h2 style={{fontSize:'32px', fontFamily:'Montserrat', fontWeight:900, marginBottom:'24px'}}>{year}</h2>
+              <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:'16px'}}>
+                {[1,2,3,4].map(q => (
+                  <button key={q} onClick={() => {setQuarter(q); setView('quarter')}} className="btn" style={{
+                    background:'white', border:`3px solid ${seasonColors[q-1]}`,
+                    padding:'24px', fontSize:'20px', fontWeight:900
+                  }}>Q{q}</button>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {/* QUARTER VIEW */}
+          {view === 'quarter' && (
+            <Card>
+              <h2 style={{fontSize:'32px', fontFamily:'Montserrat', fontWeight:900, marginBottom:'24px'}}>
+                Q{quarter} {year}
+              </h2>
+              <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(250px, 1fr))', gap:'16px'}}>
+                {[0,1,2].map(i => {
+                  const m = (quarter-1)*3 + i + 1;
+                  const cal = genCal(year, m);
+                  return (
+                    <div key={m} style={{
+                      border:`3px solid ${seasonColors[quarter-1]}`, borderRadius:'12px',
+                      padding:'16px', background:'white'
+                    }}>
+                      <h3 style={{textAlign:'center', fontWeight:900, marginBottom:'12px'}}>{months[m-1]}</h3>
+                      <div style={{display:'grid', gridTemplateColumns:'repeat(7, 1fr)', gap:'4px'}}>
+                        {['Su','Mo','Tu','We','Th','Fr','Sa'].map(d => (
+                          <div key={d} style={{textAlign:'center', fontSize:'12px', fontWeight:700}}>{d}</div>
+                        ))}
+                        {cal.map((w, wi) => w.map((d, di) => (
+                          <button key={`${wi}-${di}`} onClick={() => {if(d){setMonth(m); setView('month')}}} style={{
+                            padding:'8px', background: d ? `${seasonColors[quarter-1]}20` : 'transparent',
+                            border:'none', borderRadius:'4px', fontSize:'14px', fontWeight:700,
+                            color: d ? seasonColors[quarter-1] : 'transparent'
+                          }}>{d||'0'}</button>
+                        )))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          )}
+
+          {/* MONTH VIEW */}
+          {view === 'month' && (
+            <Card>
+              <h2 style={{fontSize:'32px', fontFamily:'Montserrat', fontWeight:900, marginBottom:'24px'}}>
+                {months[month-1]} {year}
+              </h2>
+              <div style={{marginBottom:'24px'}}>
+                <div style={{display:'grid', gridTemplateColumns:'repeat(7, 1fr)', gap:'8px'}}>
+                  {['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'].map(d => (
+                    <div key={d} style={{textAlign:'center', fontWeight:900, padding:'8px'}}>{d}</div>
+                  ))}
+                  {genCal(year, month).map((w, wi) => w.map((d, di) => (
+                    <div key={`${wi}-${di}`} style={{
+                      minHeight:'60px', padding:'8px', background: d ? 'white' : '#f5f5f5',
+                      border: d ? `2px solid ${seasonColors[season-1]}` : 'none',
+                      borderRadius:'8px', fontSize:'18px', fontWeight:700,
+                      color: d ? seasonColors[season-1] : 'transparent'
+                    }}>{d||'0'}</div>
+                  )))}
+                </div>
+              </div>
+              <div>
+                <h3 style={{fontFamily:'Montserrat', fontWeight:900, marginBottom:'12px'}}>
+                  Weeks in {months[month-1]}
+                </h3>
+                {getWeeksInMonth(year, month).map((w, idx) => {
+                  const weekNum = getWeekNumber(w.startDate);
+                  const weekData = firstTwelveWeeks[weekNum];
+                  return (
+                    <Card key={idx} color={seasonColors[season-1]} onClick={() => {
+                      setWeekStart(w.startDate);
+                      setView('week');
+                    }}>
+                      <h4 style={{fontSize:'18px', fontWeight:900}}>
+                        Week {weekNum}: {weekData?.theme || 'TBD'}
+                      </h4>
+                      <p style={{fontSize:'14px', color:'#666'}}>
+                        {formatDate(w.startDate)} - {formatDate(w.endDate)}
+                      </p>
+                      {reveal !== 'green' && weekData && (
+                        <div style={{marginTop:'8px', display:'flex', gap:'16px', fontSize:'14px'}}>
+                          <span>Leads: {weekData.hotLeads}</span>
+                          <span>Presentations: {weekData.presentations}</span>
+                          <span>Proposals: {weekData.proposals}</span>
+                        </div>
+                      )}
+                    </Card>
+                  );
+                })}
+              </div>
+            </Card>
+          )}
+
+          {/* WEEK VIEW */}
+          {view === 'week' && weekStart && (() => {
+            const weekNum = getWeekNumber(weekStart);
+            const weekData = firstTwelveWeeks[weekNum];
+            const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            const dates = days.map((_, i) => {
+              const d = new Date(weekStart);
+              d.setDate(weekStart.getDate() + i);
+              return d;
+            });
+            const endDate = new Date(weekStart);
+            endDate.setDate(weekStart.getDate() + 6);
+            
+            return (
+              <Card>
+                <h2 style={{fontSize:'32px', fontFamily:'Montserrat', fontWeight:900, marginBottom:'8px'}}>
+                  Week {weekNum}: {weekData?.theme || 'No Theme Set'}
+                </h2>
+                <p style={{fontSize:'18px', color:'#666', marginBottom:'24px'}}>
+                  {formatDate(weekStart)} - {formatDate(endDate)}
+                </p>
+                {reveal !== 'green' && weekData && (
+                  <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap:'16px', marginBottom:'24px'}}>
+                    {[{l:'Hot Leads', v:weekData.hotLeads, c:seasonColors[0]}, 
+                      {l:'Presentations', v:weekData.presentations, c:seasonColors[3]}, 
+                      {l:'Proposals', v:weekData.proposals, c:seasonColors[4]}].map(({l,v,c}) => (
+                      <div key={l} style={{padding:'16px', background:`${c}20`, borderLeft:`6px solid ${c}`, borderRadius:'12px'}}>
+                        <div style={{fontSize:'14px', fontWeight:900, marginBottom:'4px'}}>{l}</div>
+                        <div style={{fontSize:'36px', fontWeight:900, color:c}}>{v}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <h3 style={{fontSize:'24px', fontFamily:'Montserrat', fontWeight:900, marginBottom:'16px'}}>Daily Tracking</h3>
+                {days.map((d, i) => {
+                  const f = framework[d];
+                  const key = `${weekNum}-${d}`;
+                  const isEdit = editing === key;
+                  return (
+                    <div key={d} style={{
+                      border:`3px solid ${seasonColors[season-1]}`, borderRadius:'12px',
+                      padding:'16px', marginBottom:'12px', background:'white'
+                    }}>
+                      <div style={{display:'flex', justifyContent:'space-between', marginBottom:'12px', flexWrap:'wrap'}}>
+                        <div>
+                          <h4 style={{fontSize:'20px', fontWeight:900, marginBottom:'4px'}}>
+                            {d} — {formatDate(dates[i])}
+                          </h4>
+                          <p style={{fontSize:'16px', fontFamily:'Allura', fontWeight:700}}>{f.theme}</p>
+                        </div>
+                        <button onClick={() => {
+                          if(isEdit){setNotes(prev => ({...prev, [key]:temp})); setEditing(null); setTemp('');}
+                          else{setEditing(key); setTemp(notes[key]||'');}
+                        }} style={{padding:'8px', background:`${seasonColors[season-1]}20`, border:'none', borderRadius:'8px'}}>
+                          {isEdit ? '✓' : '✎'}
+                        </button>
+                      </div>
+                      <p style={{fontSize:'14px', color:'#666', marginBottom:'8px'}}>{f.focus}</p>
+                      <span style={{
+                        display:'inline-block', padding:'4px 12px', borderRadius:'999px',
+                        background:`${seasonColors[season-1]}25`, fontSize:'12px', fontWeight:700,
+                        marginBottom:'12px'
+                      }}>{f.energy}</span>
+                      {isEdit ? (
+                        <textarea value={temp} onChange={e => setTemp(e.target.value)} style={{
+                          width:'100%', padding:'12px', borderRadius:'8px',
+                          border:`2px solid ${seasonColors[season-1]}`, fontSize:'14px', minHeight:'80px'
+                        }} placeholder="Notes..." />
+                      ) : (
+                        <div style={{
+                          padding:'12px', borderRadius:'8px', background:`${seasonColors[season-1]}10`,
+                          minHeight:'60px', fontSize:'14px', whiteSpace:'pre-wrap'
+                        }}>{notes[key] || 'No notes yet...'}</div>
+                      )}
+                    </div>
+                  );
+                })}
+              </Card>
+            );
+          })()}
+
+          {/* PILLARS */}
+          <div style={{background:'rgba(255,255,255,0.95)', borderRadius:'24px', padding:'32px', marginTop:'32px'}}>
+            <h2 style={{fontSize:'28px', fontFamily:'Montserrat', fontWeight:900, marginBottom:'8px'}}>
+              Transformation Pillars
+            </h2>
+            <p style={{fontSize:'14px', color:'#888', marginBottom:'16px'}}>
+              Baseline percentages - awaiting assessment data
+            </p>
+            {pillars.map(p => (
+              <div key={p.pillar} style={{marginBottom:'16px'}}>
+                <div style={{display:'flex', justifyContent:'space-between', marginBottom:'4px'}}>
+                  <span style={{fontWeight:900, color:pillarColors[p.pillar]}}>{p.pillar}</span>
+                  <span style={{fontWeight:900, color:pillarColors[p.pillar]}}>{p.current}%</span>
+                </div>
+                <div style={{width:'100%', height:'12px', background:'#e5e7eb', borderRadius:'999px', overflow:'hidden'}}>
+                  <div style={{
+                    height:'100%', width:`${p.current}%`, background:pillarColors[p.pillar],
+                    boxShadow:`0 0 10px ${pillarColors[p.pillar]}60`, transition:'width 0.5s'
+                  }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
